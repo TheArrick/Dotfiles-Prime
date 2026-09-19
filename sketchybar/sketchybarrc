@@ -1,0 +1,83 @@
+#!/bin/bash
+
+source "$HOME/.config/sketchybar/colors.sh"
+source "$HOME/.config/sketchybar/icons.sh"
+
+ITEM_DIR="$HOME/.config/sketchybar/items"
+PLUGIN_DIR="$HOME/.config/sketchybar/plugins"
+
+FONT="Hack Nerd Font"
+PADDINGS=3
+
+##### Bar Appearance #####
+bar=(
+  position=top
+  height=40
+  blur_radius=0
+  color=$BAR_COLOR
+  shadow=on
+  padding_left=10
+  padding_right=10
+)
+sketchybar --bar "${bar[@]}"
+
+##### Defaults #####
+defaults=(
+  padding_left=$PADDINGS
+  padding_right=$PADDINGS
+  icon.font="$FONT:Bold:16.0"
+  label.font="$FONT:Bold:14.0"
+  icon.color=$WHITE
+  label.color=$WHITE
+  icon.padding_left=4
+  icon.padding_right=4
+  label.padding_left=4
+  label.padding_right=4
+)
+sketchybar --default "${defaults[@]}"
+
+##### Evento de Aerospace #####
+sketchybar --add event aerospace_workspace_change
+
+##### Items - Izquierda #####
+source "$ITEM_DIR/apple.sh"
+source "$ITEM_DIR/aerospace_spaces.sh"
+source "$ITEM_DIR/front_app.sh"
+
+##### Items - Derecha #####
+# Orden visual: [wifi  cpu  ram]   [clock  calendar  battery]
+# (sketchybar apila los items añadidos con 'right' de derecha hacia la izquierda)
+
+# 1. Status (Batería, Calendario, Reloj)
+source "$ITEM_DIR/battery.sh"
+source "$ITEM_DIR/calendar.sh"
+source "$ITEM_DIR/clock.sh"
+
+sketchybar --add bracket status battery calendar clock \
+           --set status \
+                 background.color=$POPUP_BACKGROUND_COLOR \
+                 background.corner_radius=12 \
+                 background.border_width=1 \
+                 background.border_color=$GREEN \
+                 background.height=32 \
+                 blur_radius=2
+
+# 2. Información del Sistema (RAM, CPU, Wi-Fi)
+source "$ITEM_DIR/ram.sh"
+source "$ITEM_DIR/cpu.sh"
+source "$ITEM_DIR/wifi.sh"
+
+sketchybar --add bracket sysinfo wifi cpu ram \
+           --set sysinfo \
+                 background.color=$POPUP_BACKGROUND_COLOR \
+                 background.corner_radius=12 \
+                 background.border_width=1 \
+                 background.border_color=$BLUE \
+                 background.height=32 \
+                 blur_radius=2
+
+##### Forzar ejecución inicial #####
+sketchybar --update
+sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)
+
+echo "sketchybar configuration loaded.."
