@@ -20,23 +20,22 @@ return {
             },
         })
 
-        -- Determine typescript server name supported by mason-lspconfig
-        local ts_server = "tsserver"
-
         mason_lspconfig.setup({
             -- list of servers for mason to install
             ensure_installed = {
-                ts_server,
-                "html",
-                "cssls",
-                "tailwindcss",
-                "svelte",
-                "lua_ls",
-                "graphql",
-                "emmet_ls",
-                "prismals",
-                "pyright",
-                "clangd",
+                "ts_ls",        -- TypeScript / JavaScript
+                "html",         -- HTML
+                "cssls",        -- CSS
+                "tailwindcss",  -- Tailwind CSS
+                "svelte",       -- Svelte
+                "lua_ls",       -- Lua
+                "graphql",      -- GraphQL
+                "emmet_ls",     -- Emmet
+                "prismals",     -- Prisma
+                "pyright",      -- Python
+                "clangd",       -- C / C++
+                "hls",          -- Haskell
+                "csharp_ls",    -- C#
             },
         })
 

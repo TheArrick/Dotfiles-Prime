@@ -2,9 +2,21 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
+
 -- Disable netrw for nvim-tree compatibility
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
+
+-- Fix: Neovim 0.12.5 activa treesitter automáticamente para .md aunque esté
+-- deshabilitado en nvim-treesitter, causando crash en _get_injections.
+-- Forzamos detener treesitter al abrir markdown.
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = { "markdown" },
+    callback = function(ev)
+        pcall(vim.treesitter.stop, ev.buf)
+    end,
+})
+
 
 local opt = vim.opt
 local opts = { noremap = true, silent = true }

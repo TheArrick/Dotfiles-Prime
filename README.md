@@ -17,263 +17,366 @@ Dotfiles/
 
 ## 🧠 Neovim
 
-Configuración moderna de Neovim completamente escrita en **Lua**, gestionada con [lazy.nvim](https://github.com/folke/lazy.nvim) como gestor de plugins.
+Configuración moderna de Neovim completamente escrita en **Lua**, gestionada con [lazy.nvim](https://github.com/folke/lazy.nvim).
 
 ### Estructura
 
 ```
 nvim/
-├── init.lua                          # Punto de entrada principal
-├── lazy-lock.json                    # Versiones bloqueadas de plugins
+├── init.lua
+├── lazy-lock.json
 └── lua/
     └── arrick/
-        ├── lazy.lua                  # Configuración del gestor lazy.nvim
+        ├── lazy.lua
         ├── core/
         │   ├── init.lua
-        │   └── options.lua           # Opciones globales y keymaps base
+        │   └── options.lua          # Opciones, keymaps base, fixes de compatibilidad
         └── plugins/
-            ├── colorscheme.lua       # Temas de color
-            ├── flutter.lua           # Soporte para Flutter
-            ├── formatting.lua        # Formateo automático (conform.nvim)
-            ├── latex.lua             # Soporte para LaTeX (vimtex)
-            ├── nvim-cmp.lua          # Autocompletado
-            ├── telescope.lua         # Búsqueda difusa + tmux manager
-            ├── treesitter.lua        # Resaltado sintáctico
-            ├── ui.lua                # Plugins de interfaz (lualine, nvim-tree, etc.)
+            ├── colorscheme.lua      # Temas: Everforest + Gruvbox Material
+            ├── editor.lua           # Comment, Surround, Harpoon, Trouble, Which-key, Todo-comments, ts-autotag
+            ├── flutter.lua          # Flutter Tools
+            ├── formatting.lua       # conform.nvim (formato al guardar)
+            ├── git.lua              # Gitsigns + LazyGit
+            ├── latex.lua            # VimTeX
+            ├── markdown.lua         # Markdown Preview (navegador)
+            ├── nvim-cmp.lua         # Autocompletado + LuaSnip
+            ├── telescope.lua        # Búsqueda + Tmux Manager
+            ├── treesitter.lua       # Resaltado sintáctico (20 parsers)
+            ├── ui.lua               # Lualine, NvimTree, Autopairs, Colorizer, etc.
             └── lsp/
-                ├── mason.lua         # Gestor de LSP/linters/formatters
-                └── lspconfig.lua     # Configuración de servidores LSP
+                ├── mason.lua        # Instalador automático de LSPs/linters/formatters
+                └── lspconfig.lua    # Configuración LSP (nueva API vim.lsp.config)
 ```
+
+---
 
 ### ⚙️ Configuración Principal
 
-| Opción | Valor |
-|--------|-------|
-| `mapleader` | `<Space>` |
-| Números de línea | Relativos |
-| Tab size | 4 espacios |
-| Clipboard | Sistema (`unnamedplus`) |
-| Background | Dark |
-| Splits | Derecha y abajo |
-| Tema | Everforest (predeterminado) |
+| Opción              | Valor                   |
+| ------------------- | ----------------------- |
+| `mapleader`         | `Espacio`               |
+| Números de línea    | Relativos               |
+| Tab size            | 4 espacios              |
+| Clipboard           | Sistema (`unnamedplus`) |
+| Background          | Dark                    |
+| Splits              | Derecha y abajo         |
+| Tema predeterminado | Everforest              |
+
+---
 
 ### 🎨 Temas de Color
 
-| Plugin | Descripción |
-|--------|-------------|
-| `neanias/everforest-nvim` | Tema principal (fondo transparente, contraste alto) |
-| `sainnhe/gruvbox-material` | Tema alternativo con soporte de itálicas |
+| Plugin                     | Descripción                                         |
+| -------------------------- | --------------------------------------------------- |
+| `neanias/everforest-nvim`  | Tema principal (fondo transparente, contraste alto) |
+| `sainnhe/gruvbox-material` | Tema alternativo con itálicas                       |
 
-### 🔌 Plugins de Neovim
+Cambia el tema en cualquier momento con `<leader>ths` (Telescope themes con preview en vivo).
+
+---
+
+### 🔌 Plugins
 
 #### 🔍 Búsqueda y Navegación
 
-| Plugin | Descripción |
-|--------|-------------|
-| `nvim-telescope/telescope.nvim` | Buscador difuso de archivos, texto, buffers |
-| `nvim-telescope/telescope-fzf-native.nvim` | Extensión FZF nativa para mayor velocidad |
-| `andrew-george/telescope-themes` | Cambio de temas con preview en vivo |
-| `nvim-tree/nvim-tree.lua` | Explorador de archivos tipo árbol |
-| `nvim-tree/nvim-web-devicons` | Iconos para archivos |
-| `nvim-lua/plenary.nvim` | Librería de utilidades Lua (dependencia) |
+| Plugin                                     | Descripción                                  |
+| ------------------------------------------ | -------------------------------------------- |
+| `nvim-telescope/telescope.nvim`            | Buscador difuso de archivos, texto, buffers  |
+| `nvim-telescope/telescope-fzf-native.nvim` | Motor FZF nativo para Telescope              |
+| `andrew-george/telescope-themes`           | Cambio de temas con preview en vivo          |
+| `nvim-tree/nvim-tree.lua`                  | Explorador de archivos tipo árbol            |
+| `ThePrimeagen/harpoon` (v2)                | Marcadores rápidos entre archivos frecuentes |
+| `nvim-lua/plenary.nvim`                    | Librería de utilidades Lua                   |
+| `nvim-tree/nvim-web-devicons`              | Iconos de archivos                           |
 
 #### 📝 Autocompletado
 
-| Plugin | Descripción |
-|--------|-------------|
-| `hrsh7th/nvim-cmp` | Motor de autocompletado |
-| `hrsh7th/cmp-nvim-lsp` | Fuente de completado desde LSP |
-| `hrsh7th/cmp-buffer` | Completado desde el buffer actual |
-| `hrsh7th/cmp-path` | Completado de rutas del sistema |
-| `L3MON4D3/LuaSnip` | Motor de snippets |
-| `saadparwaiz1/cmp_luasnip` | Integración de LuaSnip con nvim-cmp |
-| `rafamadriz/friendly-snippets` | Colección de snippets estilo VSCode |
-| `onsails/lspkind.nvim` | Iconos tipo VSCode en el menú de completado |
+| Plugin                         | Descripción                       |
+| ------------------------------ | --------------------------------- |
+| `hrsh7th/nvim-cmp`             | Motor de autocompletado           |
+| `hrsh7th/cmp-nvim-lsp`         | Fuente de completado desde LSP    |
+| `hrsh7th/cmp-buffer`           | Completado desde el buffer actual |
+| `hrsh7th/cmp-path`             | Completado de rutas del sistema   |
+| `L3MON4D3/LuaSnip`             | Motor de snippets                 |
+| `saadparwaiz1/cmp_luasnip`     | Integración LuaSnip → nvim-cmp    |
+| `rafamadriz/friendly-snippets` | Snippets estilo VSCode            |
+| `onsails/lspkind.nvim`         | Iconos en el menú de completado   |
 
-#### 🩺 LSP (Language Server Protocol)
+#### 🩺 LSP
 
-| Plugin | Descripción |
-|--------|-------------|
-| `neovim/nvim-lspconfig` | Configuración de servidores LSP |
-| `williamboman/mason.nvim` | Gestor de instalación de LSPs/linters/formatters |
-| `williamboman/mason-lspconfig.nvim` | Integración Mason ↔ lspconfig |
-| `WhoIsSethDaniel/mason-tool-installer.nvim` | Instalación automática de herramientas |
+| Plugin                                      | Descripción                                           |
+| ------------------------------------------- | ----------------------------------------------------- |
+| `neovim/nvim-lspconfig`                     | Definiciones de servidores LSP (API `vim.lsp.config`) |
+| `williamboman/mason.nvim`                   | Gestor de instalación de LSPs                         |
+| `williamboman/mason-lspconfig.nvim`         | Integración Mason ↔ lspconfig                        |
+| `WhoIsSethDaniel/mason-tool-installer.nvim` | Instalación automática de herramientas                |
 
 **Servidores LSP instalados automáticamente:**
 
-| Servidor | Lenguaje |
-|----------|----------|
-| `tsserver` / `ts_ls` | TypeScript / JavaScript |
-| `html` | HTML |
-| `cssls` | CSS |
-| `tailwindcss` | Tailwind CSS |
-| `svelte` | Svelte |
-| `lua_ls` | Lua |
-| `graphql` | GraphQL |
-| `emmet_ls` | Emmet (HTML/CSS) |
-| `prismals` | Prisma ORM |
-| `pyright` | Python |
-| `clangd` | C / C++ |
-| `hls` | Haskell |
-| `csharp_ls` | C# |
+| Servidor      | Lenguaje                |
+| ------------- | ----------------------- |
+| `ts_ls`       | TypeScript / JavaScript |
+| `html`        | HTML                    |
+| `cssls`       | CSS                     |
+| `tailwindcss` | Tailwind CSS            |
+| `svelte`      | Svelte                  |
+| `lua_ls`      | Lua                     |
+| `graphql`     | GraphQL                 |
+| `emmet_ls`    | Emmet                   |
+| `prismals`    | Prisma ORM              |
+| `pyright`     | Python                  |
+| `clangd`      | C / C++                 |
+| `hls`         | Haskell                 |
+| `csharp_ls`   | C#                      |
 
-#### 🧹 Formateo (conform.nvim)
+#### 🧹 Formateo — conform.nvim (auto al guardar)
 
-| Herramienta | Lenguajes |
-|-------------|-----------|
-| `prettier` | JS, TS, JSX, TSX, Svelte, CSS, HTML, JSON, YAML, Markdown, GraphQL |
-| `stylua` | Lua |
-| `isort` + `black` | Python |
-| `clang-format` | C, C++ |
-| `eslint_d` | JavaScript (linter) |
-| `pylint` | Python (linter) |
+| Herramienta       | Lenguajes                                                          |
+| ----------------- | ------------------------------------------------------------------ |
+| `prettier`        | JS, TS, JSX, TSX, Svelte, CSS, HTML, JSON, YAML, Markdown, GraphQL |
+| `stylua`          | Lua                                                                |
+| `isort` + `black` | Python                                                             |
+| `clang-format`    | C, C++                                                             |
+| `eslint_d`        | JavaScript (linter)                                                |
+| `pylint`          | Python (linter)                                                    |
+
+#### 🌿 Git
+
+| Plugin                    | Descripción                                         |
+| ------------------------- | --------------------------------------------------- |
+| `lewis6991/gitsigns.nvim` | Signos en gutter, blame inline, navegación de hunks |
+| `kdheepak/lazygit.nvim`   | LazyGit integrado en Neovim                         |
+
+#### ✍️ Edición
+
+| Plugin                   | Descripción                                         |
+| ------------------------ | --------------------------------------------------- |
+| `numToStr/Comment.nvim`  | Comentar/descomentar con `gcc` / `gc`               |
+| `kylechui/nvim-surround` | Editar comillas, paréntesis, tags: `ys`, `cs`, `ds` |
+| `windwp/nvim-ts-autotag` | Cierre automático de tags HTML/JSX/Svelte           |
+| `windwp/nvim-autopairs`  | Cierre automático de paréntesis y corchetes         |
+
+#### 🔴 Diagnósticos y TODOs
+
+| Plugin                     | Descripción                                       |
+| -------------------------- | ------------------------------------------------- |
+| `folke/trouble.nvim`       | Panel de diagnósticos LSP mejorado                |
+| `folke/todo-comments.nvim` | Resaltar y listar `TODO`, `FIXME`, `HACK`, `NOTE` |
+
+#### 🗺️ Which-key
+
+| Plugin                 | Descripción                             |
+| ---------------------- | --------------------------------------- |
+| `folke/which-key.nvim` | Popup de atajos al presionar `<leader>` |
 
 #### 🖥️ Interfaz de Usuario
 
-| Plugin | Descripción |
-|--------|-------------|
-| `nvim-lualine/lualine.nvim` | Barra de estado elegante (tema Everforest) |
-| `lukas-reineke/indent-blankline.nvim` | Guías de indentación |
-| `windwp/nvim-autopairs` | Cierre automático de paréntesis/corchetes |
-| `catgoose/nvim-colorizer.lua` | Preview de colores hex en el editor |
-| `stevearvis/dressing.nvim` | Mejoras a los inputs y selects de Neovim |
+| Plugin                                | Descripción                         |
+| ------------------------------------- | ----------------------------------- |
+| `nvim-lualine/lualine.nvim`           | Barra de estado (tema Everforest)   |
+| `lukas-reineke/indent-blankline.nvim` | Guías de indentación                |
+| `catgoose/nvim-colorizer.lua`         | Preview de colores hex en el editor |
+| `stevearc/dressing.nvim`              | Inputs y selects mejorados          |
 
 #### 🌳 Syntax Highlighting
 
-| Plugin | Descripción |
-|--------|-------------|
+| Plugin                            | Descripción                        |
+| --------------------------------- | ---------------------------------- |
 | `nvim-treesitter/nvim-treesitter` | Resaltado sintáctico basado en AST |
 
-#### 🔗 Integración con Tmux
+**Parsers instalados:** `lua`, `vim`, `vimdoc`, `html`, `css`, `javascript`, `typescript`, `tsx`, `svelte`, `graphql`, `python`, `c`, `cpp`, `java`, `json`, `yaml`, `toml`, `bash`, `dart`, `prisma`
 
-| Plugin | Descripción |
-|--------|-------------|
-| `christoomey/vim-tmux-navigator` | Navegación entre paneles Neovim/Tmux con `<C-h/j/k/l>` |
-| `otavioschwanck/tmux-awesome-manager.nvim` | Gestión de comandos Tmux desde Neovim |
+> ⚠️ `markdown` y `markdown_inline` están deshabilitados por incompatibilidad con Neovim 0.12.5. Usar `markdown-preview.nvim` para visualizar `.md`.
 
-#### 📱 Desarrollo Flutter
+#### 📝 Markdown
 
-| Plugin | Descripción |
-|--------|-------------|
-| `akinsho/flutter-tools.nvim` | Herramientas para desarrollo Flutter/Dart |
-| `mfussenegger/nvim-jdtls` | Soporte para Java (Android/JVM) |
+| Plugin                         | Descripción                                        |
+| ------------------------------ | -------------------------------------------------- |
+| `iamcco/markdown-preview.nvim` | Preview de Markdown en el navegador con hot-reload |
+
+**Uso:**
+
+- Abre un archivo `.md`
+- Presiona `<leader>mp` para abrir el preview en el navegador
+- El preview se actualiza en tiempo real mientras editas
+
+#### 🔗 Tmux
+
+| Plugin                                     | Descripción                         |
+| ------------------------------------------ | ----------------------------------- |
+| `christoomey/vim-tmux-navigator`           | Navegación entre paneles Nvim/Tmux  |
+| `otavioschwanck/tmux-awesome-manager.nvim` | Gestión de comandos Tmux desde Nvim |
+
+#### 📱 Flutter / Java
+
+| Plugin                       | Descripción                    |
+| ---------------------------- | ------------------------------ |
+| `akinsho/flutter-tools.nvim` | Herramientas para Flutter/Dart |
+| `mfussenegger/nvim-jdtls`    | Soporte Java                   |
 
 #### 📄 LaTeX
 
-| Plugin | Descripción |
-|--------|-------------|
-| `lervag/vimtex` | Soporte completo para LaTeX |
+| Plugin          | Descripción                                |
+| --------------- | ------------------------------------------ |
+| `lervag/vimtex` | Soporte completo para LaTeX (viewer: Skim) |
 
-### ⌨️ Keymaps Principales
+---
 
-| Atajo | Acción |
-|-------|--------|
-| `<leader>pr` | Buscar archivos (Telescope) |
-| `<leader>pt` | Buscar texto (Live Grep) |
-| `<leader>fb` | Listar buffers |
-| `<leader>ths` | Cambiar tema de color |
-| `<leader>ee` | Alternar explorador de archivos |
-| `<leader>ef` | Buscar archivo en explorador |
-| `<leader>ca` | Ver acciones de código (LSP) |
-| `<leader>rn` | Renombrar símbolo (LSP) |
-| `<leader>d` | Ver diagnóstico de línea |
-| `<leader>D` | Ver diagnósticos del buffer |
-| `<leader>mp` | Formatear archivo/selección |
-| `<leader>cp` | Copiar todo el archivo al portapapeles |
-| `gd` | Ir a definición |
-| `gD` | Ir a declaración |
-| `gR` | Ver referencias |
-| `K` | Ver documentación hover |
+### ⌨️ Keymaps Completos
+
+> `<leader>` = `Espacio`
+
+#### 📁 Explorador de Archivos
+
+| Atajo        | Acción                              |
+| ------------ | ----------------------------------- |
+| `<leader>ee` | Abrir/cerrar explorador             |
+| `<leader>ef` | Buscar archivo activo en explorador |
+| `<leader>ec` | Colapsar todo                       |
+| `<leader>er` | Refrescar                           |
+
+#### 🔍 Telescope
+
+| Atajo         | Acción                   |
+| ------------- | ------------------------ |
+| `<leader>pr`  | Buscar archivos          |
+| `<leader>pt`  | Buscar texto (live grep) |
+| `<leader>fb`  | Listar buffers           |
+| `<leader>fh`  | Buscar en ayuda          |
+| `<leader>ths` | Cambiar tema de color    |
+
+#### 🪝 Harpoon
+
+| Atajo          | Acción                |
+| -------------- | --------------------- |
+| `<leader>ha`   | Marcar archivo        |
+| `<leader>hh`   | Abrir menú            |
+| `<leader>h1-4` | Saltar al archivo 1-4 |
+
+#### 🩺 LSP
+
+| Atajo        | Acción                  |
+| ------------ | ----------------------- |
+| `gd`         | Ir a definición         |
+| `gD`         | Ir a declaración        |
+| `gR`         | Ver referencias         |
+| `gi`         | Ver implementaciones    |
+| `gt`         | Ver tipo                |
+| `K`          | Documentación hover     |
+| `<leader>ca` | Acciones de código      |
+| `<leader>rn` | Renombrar símbolo       |
+| `<leader>d`  | Diagnóstico de línea    |
+| `<leader>D`  | Diagnósticos del buffer |
+| `<leader>rs` | Reiniciar LSP           |
+
+#### 🔴 Trouble
+
+| Atajo        | Acción                     |
+| ------------ | -------------------------- |
+| `<leader>xx` | Diagnósticos del workspace |
+| `<leader>xd` | Diagnósticos del buffer    |
+| `<leader>xs` | Símbolos                   |
+| `<leader>xl` | Panel LSP                  |
+| `<leader>xq` | Quickfix                   |
+
+#### 🌿 Git
+
+| Atajo        | Acción                  |
+| ------------ | ----------------------- |
+| `<leader>gg` | Abrir LazyGit           |
+| `]h` / `[h`  | Siguiente/anterior hunk |
+| `<leader>gs` | Stage hunk              |
+| `<leader>gr` | Reset hunk              |
+| `<leader>gS` | Stage buffer            |
+| `<leader>gb` | Toggle blame inline     |
+| `<leader>gd` | Diff con HEAD           |
+
+#### 💬 Comentarios
+
+| Atajo         | Acción                     |
+| ------------- | -------------------------- |
+| `gcc`         | Comentar/descomentar línea |
+| `gc` (visual) | Comentar selección         |
+
+#### 🔗 Surround
+
+| Atajo   | Ejemplo          | Resultado |
+| ------- | ---------------- | --------- |
+| `ysiw"` | cursor en `hola` | `"hola"`  |
+| `cs"'`  | `"hola"`         | `'hola'`  |
+| `ds"`   | `"hola"`         | `hola`    |
+
+#### ✅ TODOs
+
+| Atajo        | Acción                  |
+| ------------ | ----------------------- |
+| `]t` / `[t`  | Siguiente/anterior TODO |
+| `<leader>ts` | Buscar con Telescope    |
+| `<leader>td` | Ver en Trouble          |
+
+#### 📝 Markdown
+
+| Atajo        | Acción                               |
+| ------------ | ------------------------------------ |
+| `<leader>mp` | Preview en navegador (solo en `.md`) |
+
+#### 🧹 Formateo
+
+| Atajo        | Acción                        |
+| ------------ | ----------------------------- |
+| `<leader>fm` | Formatear archivo o selección |
+| (auto)       | Se formatea al guardar        |
+
+#### 📋 General
+
+| Atajo         | Acción                                 |
+| ------------- | -------------------------------------- |
+| `<leader>cp`  | Copiar todo el archivo al portapapeles |
+| `<leader>?`   | Ver atajos del buffer (Which-key)      |
+| `<C-h/j/k/l>` | Navegar entre paneles Nvim/Tmux        |
 
 ---
 
 ## 📊 Sketchybar
 
-Barra de estado personalizada para **macOS** usando [SketchyBar](https://github.com/FelixKratz/SketchyBar), integrada con [AeroSpace](https://github.com/nikitabobko/AeroSpace) como gestor de ventanas.
+Barra de estado personalizada para **macOS** con [SketchyBar](https://github.com/FelixKratz/SketchyBar) + [AeroSpace](https://github.com/nikitabobko/AeroSpace).
 
 ### Estructura
 
 ```
 sketchybar/
-├── sketchybarrc          # Configuración principal de la barra
-├── colors.sh             # Paleta de colores (estilo Everforest)
-├── icons.sh              # Definición de iconos
-├── icon_map.sh           # Mapa extenso de iconos por aplicación
-├── items/                # Definición de cada item de la barra
-│   ├── apple.sh          # Menú Apple (izquierda)
-│   ├── aerospace_spaces.sh # Espacios de trabajo AeroSpace
-│   ├── front_app.sh      # Aplicación en primer plano
-│   ├── clock.sh          # Reloj
-│   ├── calendar.sh       # Fecha
-│   ├── battery.sh        # Batería
-│   ├── cpu.sh            # Uso de CPU
-│   ├── ram.sh            # Uso de RAM
-│   ├── wifi.sh           # Estado de Wi-Fi
-│   ├── volume.sh         # Control de volumen
-│   ├── github.sh         # Notificaciones de GitHub
-│   ├── spotify.sh        # Reproducción de Spotify
-│   ├── brew.sh           # Actualizaciones de Homebrew
-│   └── spaces.sh         # Espacios de misión
-└── plugins/              # Scripts que actualizan los items
-    ├── aerospace.sh
-    ├── battery.sh
-    ├── calendar.sh
-    ├── clock.sh
-    ├── cpu.sh
-    ├── front_app.sh
-    ├── ram.sh
-    ├── space.sh
-    ├── volume.sh
-    ├── volume_click.sh
-    └── wifi.sh
+├── sketchybarrc          # Config principal
+├── colors.sh             # Paleta Everforest
+├── icons.sh              # Iconos
+├── icon_map.sh           # Mapa de iconos por app
+├── items/                # Definición de items
+│   ├── apple.sh
+│   ├── aerospace_spaces.sh
+│   ├── front_app.sh
+│   ├── clock.sh, calendar.sh, battery.sh
+│   ├── cpu.sh, ram.sh, wifi.sh
+│   ├── volume.sh, spotify.sh
+│   ├── github.sh, brew.sh
+│   └── spaces.sh
+└── plugins/              # Scripts de actualización
 ```
 
-### 🎨 Paleta de Colores
-
-Los colores siguen el esquema **Everforest** (tonos verdes/café cálidos):
-
-| Variable | Hex | Uso |
-|----------|-----|-----|
-| `BLACK` | `#2d353b` | Fondo de popups |
-| `WHITE` | `#d3c6aa` | Texto e iconos |
-| `GREEN` | `#a7c080` | Borde del grupo Status |
-| `BLUE` | `#7fbbb3` | Borde del grupo SysInfo |
-| `RED` | `#e67e80` | Alertas |
-| `YELLOW` | `#dbbc7f` | Avisos |
-| `ORANGE` | `#e69875` | Advertencias |
-| `SPOTIFY_GREEN` | `#1db954` | Integración Spotify |
-| `BAR_COLOR` | Transparente | Fondo de la barra |
-
-### 📦 Grupos de la Barra
+### Layout de la Barra
 
 ```
-[  Spaces]  [Front App]              [wifi  cpu  ram]  [clock  cal  battery]
- Izquierda                            SysInfo (azul)    Status (verde)
+[  Spaces]  [Front App]          [wifi  cpu  ram]  [clock  cal  battery]
+ Izquierda                        SysInfo (azul)     Status (verde)
 ```
 
-### 🖥️ Items de la Barra
+### Paleta de Colores (Everforest)
 
-| Item | Descripción |
-|------|-------------|
-| Apple | Menú de Apple con logo |
-| Spaces (AeroSpace) | Espacios de trabajo con integración AeroSpace |
-| Front App | Nombre de la app activa en primer plano |
-| Battery | Nivel de batería con ícono dinámico |
-| Calendar | Fecha actual |
-| Clock | Hora en tiempo real |
-| CPU | Porcentaje de uso de CPU |
-| RAM | Uso de memoria RAM |
-| Wi-Fi | Estado de conexión inalámbrica |
-
-### 🔤 Fuente Requerida
-
-`Hack Nerd Font` — Necesaria para renderizar los iconos correctamente.
-
----
-
-## 📱 Flutter
-
-El directorio `flutter/` contiene el estado de las herramientas de Flutter SDK, usado internamente para rastrear versiones activas del SDK.
+| Color | Hex       | Uso           |
+| ----- | --------- | ------------- |
+| BLACK | `#2d353b` | Fondo popups  |
+| WHITE | `#d3c6aa` | Texto/iconos  |
+| GREEN | `#a7c080` | Borde Status  |
+| BLUE  | `#7fbbb3` | Borde SysInfo |
+| RED   | `#e67e80` | Alertas       |
 
 ---
 
@@ -281,89 +384,64 @@ El directorio `flutter/` contiene el estado de las herramientas de Flutter SDK, 
 
 ### Neovim
 
-| Dependencia | Versión | Instalación |
-|-------------|---------|-------------|
-| Neovim | ≥ 0.10 | `brew install neovim` |
-| Git | Cualquiera | Preinstalado en macOS |
-| `make` | Cualquiera | Xcode Command Line Tools |
-| `ripgrep` | Cualquiera | `brew install ripgrep` |
-| `fd` | Cualquiera | `brew install fd` |
-| Node.js + npm | LTS | `brew install node` |
-| Python 3 | ≥ 3.8 | `brew install python` |
-| Clang/LLVM | Cualquiera | Xcode CLT o `brew install llvm` |
-| Tmux (opcional) | Cualquiera | `brew install tmux` |
+| Dependencia | Versión    | Instalación            |
+| ----------- | ---------- | ---------------------- |
+| Neovim      | ≥ 0.11     | `brew install neovim`  |
+| Git         | Cualquiera | Preinstalado           |
+| `make`      | Cualquiera | Xcode CLT              |
+| `ripgrep`   | Cualquiera | `brew install ripgrep` |
+| `fd`        | Cualquiera | `brew install fd`      |
+| Node.js     | LTS        | `brew install node`    |
+| Python 3    | ≥ 3.8      | `brew install python`  |
+| Clang/LLVM  | Cualquiera | Xcode CLT              |
+| Tmux        | Cualquiera | `brew install tmux`    |
+| LazyGit     | Cualquiera | `brew install lazygit` |
 
 ### Sketchybar
 
-| Dependencia | Descripción | Instalación |
-|-------------|-------------|-------------|
-| SketchyBar | Barra de estado | `brew install sketchybar` |
-| AeroSpace | Gestor de ventanas | `brew install --cask aerospace` |
-| Hack Nerd Font | Fuente con iconos | `brew install --cask font-hack-nerd-font` |
-| jq (opcional) | Procesamiento JSON | `brew install jq` |
+| Dependencia    | Instalación                               |
+| -------------- | ----------------------------------------- |
+| SketchyBar     | `brew install sketchybar`                 |
+| AeroSpace      | `brew install --cask aerospace`           |
+| Hack Nerd Font | `brew install --cask font-hack-nerd-font` |
 
 ---
 
 ## 🚀 Instalación
 
-### 1. Clonar el repositorio
-
 ```bash
+# 1. Clonar
 git clone https://github.com/<tu-usuario>/Dotfiles.git ~/Workspace/Dotfiles
-```
 
-### 2. Enlazar Neovim
-
-```bash
+# 2. Enlazar configuraciones
 ln -sf ~/Workspace/Dotfiles/nvim ~/.config/nvim
-```
-
-### 3. Enlazar Sketchybar
-
-```bash
 ln -sf ~/Workspace/Dotfiles/sketchybar ~/.config/sketchybar
-```
 
-### 4. Instalar dependencias del sistema
-
-```bash
-# Homebrew (si no lo tienes)
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-
-# Neovim y herramientas
-brew install neovim ripgrep fd node python tmux
-
-# Sketchybar y AeroSpace
+# 3. Instalar dependencias
+brew install neovim ripgrep fd node python tmux lazygit
 brew install sketchybar
-brew install --cask aerospace
+brew install --cask aerospace font-hack-nerd-font
 
-# Fuente Nerd Font
-brew install --cask font-hack-nerd-font
-```
-
-### 5. Abrir Neovim
-
-Al abrir Neovim por primera vez, `lazy.nvim` se instalará automáticamente y descargará todos los plugins. Los servidores LSP y herramientas de formateo se instalarán mediante Mason.
-
-```bash
+# 4. Abrir Neovim (lazy.nvim se instala automáticamente)
 nvim
-```
+# Dentro de Neovim: :Lazy sync
+# Luego: :MasonUpdate para instalar LSPs
 
-### 6. Iniciar SketchyBar
-
-```bash
+# 5. Iniciar Sketchybar
 brew services start sketchybar
-# o para recargar la configuración:
-sketchybar --reload
 ```
 
 ---
 
 ## 📝 Notas
 
-- El template de C++ (`template.cpp`) se busca en `~/Workspace/Competitiva/Template/template.cpp`. Ajustar la ruta en `options.lua` si es necesario.
-- La integración con Tmux renombrará automáticamente las ventanas con el nombre del archivo activo en Neovim.
-- Los plugins se gestionan con `lazy.nvim` con actualizaciones automáticas deshabilitadas (`checker.enabled = false`). Para actualizar, usar `:Lazy update` dentro de Neovim.
+- El template de C++ se busca en `~/Workspace/Competitiva/Template/template.cpp`
+- La integración Tmux renombra ventanas con el nombre del archivo activo
+- `nvim-treesitter` está pineado al commit `0e21ee8` por compatibilidad con Neovim 0.12.5
+- Los parsers `markdown`/`markdown_inline` están deshabilitados (bug de injecciones en Neovim 0.12.5). Usar `:TSUninstall markdown markdown_inline` si ya estaban instalados
+- Para actualizar plugins: `:Lazy update` (treesitter no se actualizará por el pin)
+- Para actualizar LSPs: `:MasonUpdate`
+- Para actualizar parsers: `:TSUpdate`
 
 ---
 
