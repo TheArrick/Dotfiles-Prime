@@ -48,6 +48,7 @@ return {
                 "pylint",       -- python linter
                 "eslint_d",     -- js linter
                 "clang-format", -- c/c++ formatter
+                "sonarlint-language-server", -- SonarLint language server
             },
         })
     end,

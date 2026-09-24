@@ -13,12 +13,17 @@ return {
             virtual_text = true,
             signs = {
                 text = {
-                    [vim.diagnostic.severity.ERROR] = " ",
-                    [vim.diagnostic.severity.WARN]  = " ",
-                    [vim.diagnostic.severity.HINT]  = "󰠠 ",
-                    [vim.diagnostic.severity.INFO]  = " ",
+                    [vim.diagnostic.severity.ERROR] = "E",
+                    [vim.diagnostic.severity.WARN]  = "W",
+                    [vim.diagnostic.severity.HINT]  = "H",
+                    [vim.diagnostic.severity.INFO]  = "I",
                 },
             },
+        })
+
+        vim.keymap.set("n", "<leader>d", vim.diagnostic.open_float, {
+            silent = true,
+            desc = "Diagnostico de la linea",
         })
 
         -- Keymaps al adjuntar un LSP al buffer
@@ -52,9 +57,6 @@ return {
                 opts.desc = "Diagnosticos del buffer"
                 keymap.set("n", "<leader>D", "<cmd>Telescope diagnostics bufnr=0<CR>", opts)
 
-                opts.desc = "Diagnostico de la linea"
-                keymap.set("n", "<leader>d", vim.diagnostic.open_float, opts)
-
                 opts.desc = "Documentacion hover"
                 keymap.set("n", "K", vim.lsp.buf.hover, opts)
 
@@ -74,7 +76,12 @@ return {
             prismals  = { capabilities = capabilities },
             pyright   = { capabilities = capabilities },
             hls       = { capabilities = capabilities },
-            csharp_ls = { capabilities = capabilities },
+            csharp_ls = {
+                capabilities = capabilities,
+                on_attach = function(client)
+                    client.server_capabilities.semanticTokensProvider = nil
+                end,
+            },
 
             tailwindcss = {
                 capabilities = capabilities,
