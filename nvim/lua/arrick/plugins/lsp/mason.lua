@@ -21,6 +21,9 @@ return {
         })
 
         mason_lspconfig.setup({
+            -- Los servidores se activan a mano en lspconfig.lua; sin esto Mason
+            -- enciende todo lo instalado (p. ej. stylua como LSP, ltex-ls).
+            automatic_enable = false,
             -- list of servers for mason to install
             ensure_installed = {
                 "ts_ls",        -- TypeScript / JavaScript

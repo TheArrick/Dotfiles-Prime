@@ -20,7 +20,11 @@ return {
 					palette.bg_visual = "#384D19"
 				end,
 			})
-			vim.cmd([[colorscheme everforest]])
+			-- Tema guardado por el selector de Telescope (<leader>ths), si existe
+			local saved = vim.fn.stdpath("state") .. "/current-theme.lua"
+			if not (vim.uv.fs_stat(saved) and pcall(dofile, saved)) then
+				vim.cmd([[colorscheme everforest]])
+			end
 		end,
 	},
 	-- {

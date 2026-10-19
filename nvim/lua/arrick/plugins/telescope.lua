@@ -29,7 +29,8 @@ return {
                         enable_live_preview = true,
                         persist = {
                             enabled = true,
-                            path = vim.fn.stdpath("config") .. "/lua/current-theme.lua",
+                            -- Fuera del repo para no ensuciar git; colorscheme.lua lo carga al iniciar
+                            path = vim.fn.stdpath("state") .. "/current-theme.lua",
                         },
                     },
                 },

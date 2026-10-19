@@ -1,6 +1,7 @@
 return {
     "nvim-treesitter/nvim-treesitter",
-    commit = "0e21ee8df6235511c02bab4a5b391d18e165a58d", -- versión estable con Neovim 0.12.5
+    branch = "master",                                   -- API antigua (nvim-treesitter.configs)
+    commit = "cf12346a3414fa1b06af75c79faebe7f76df080a", -- commit instalado y probado con Neovim 0.12
     pin = true,                                          -- no actualizar hasta verificar compatibilidad
     event = { "BufReadPre", "BufNewFile" },
     build = ":TSUpdate",
