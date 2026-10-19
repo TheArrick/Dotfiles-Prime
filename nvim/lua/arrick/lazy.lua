@@ -17,7 +17,7 @@ require("lazy").setup({
     { import = "arrick.plugins.lsp" },
 }, {
     install = {
-        colorscheme = { "everforest" },
+        colorscheme = { "everforest", "solarized-osaka", "thorn", "gruvbox" },
     },
     checker = {
         enabled = false,

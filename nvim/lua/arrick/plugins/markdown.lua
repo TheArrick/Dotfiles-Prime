@@ -1,5 +1,4 @@
 return {
-    -- Preview de Markdown en el navegador con hot-reload
     {
         "iamcco/markdown-preview.nvim",
         cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
@@ -20,3 +19,5 @@ return {
         end,
     },
 }
+
+
